@@ -29,9 +29,11 @@ import lombok.Getter;
 import net.runelite.api.Client;
 import net.runelite.api.Quest;
 import net.runelite.api.QuestState;
+import net.runelite.api.Skill;
 import net.runelite.api.TileObject;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.gameval.ObjectID;
+import net.runelite.api.gameval.VarbitID;
 
 @Getter
 public enum AgilityShortcut
@@ -100,15 +102,50 @@ public enum AgilityShortcut
 	KARAMJA_GLIDER_LOG(1, "Log Balance", new WorldPoint(2906, 3050, 0), ObjectID.ZQ_LOGBALANCE),
 	FALADOR_CRUMBLING_WALL(5, "Crumbling Wall", new WorldPoint(2936, 3357, 0), ObjectID.FAI_FALADOR_CASTLE_CRUMBLE_MID),
 	YANILLE_CLIMBING_ROCKS(5, "Climbing rocks", null, ObjectID.WATCHSHORTCUT),
-	RIVER_LUM_GRAPPLE_WEST(8, "Grapple Broken Raft", new WorldPoint(3245, 3179, 0), ObjectID.XBOWS_RAFT_BR),
-	RIVER_LUM_GRAPPLE_EAST(8, "Grapple Broken Raft", new WorldPoint(3258, 3179, 0), ObjectID.XBOWS_RAFT_BR),
+	RIVER_LUM_GRAPPLE_WEST(8, "Grapple Broken Raft", new WorldPoint(3245, 3179, 0), ObjectID.XBOWS_RAFT_BR)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return client.getBoostedSkillLevel(Skill.STRENGTH) >= 19 && client.getBoostedSkillLevel(Skill.RANGED) >= 37;
+		}
+	},
+	RIVER_LUM_GRAPPLE_EAST(8, "Grapple Broken Raft", new WorldPoint(3258, 3179, 0), ObjectID.XBOWS_RAFT_BR)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return client.getBoostedSkillLevel(Skill.STRENGTH) >= 19 && client.getBoostedSkillLevel(Skill.RANGED) >= 37;
+		}
+	},
 	CORSAIR_COVE_ROCKS(10, "Rocks", new WorldPoint(2545, 2871, 0), ObjectID.DS2_CORSAIR_COVE_SHORTCUT),
 	KARAMJA_MOSS_GIANT_SWING(10, "Rope", null, ObjectID.TREE_ROPESWING1, ObjectID.TREE_ROPESWING2),
-	FALADOR_GRAPPLE_WALL(11, "Grapple Wall", new WorldPoint(3031, 3391, 0), ObjectID.XBOWS_FAI_FALADOR_CASTLE_WALLS_HILLSKEW, ObjectID.XBOWS_FAI_FALADOR_CASTLE_ARCHES_HILLSKEW),
+	FALADOR_GRAPPLE_WALL(11, "Grapple Wall", new WorldPoint(3031, 3391, 0), ObjectID.XBOWS_FAI_FALADOR_CASTLE_WALLS_HILLSKEW, ObjectID.XBOWS_FAI_FALADOR_CASTLE_ARCHES_HILLSKEW)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return client.getBoostedSkillLevel(Skill.STRENGTH) >= 37 && client.getBoostedSkillLevel(Skill.RANGED) >= 19;
+		}
+	},
 	BRIMHAVEN_DUNGEON_STEPPING_STONES(12, "Stepping Stones", null, ObjectID.KARAM_DUNGEON_STONE1),
 	VARROCK_SOUTH_FENCE(13, "Fence", new WorldPoint(3239, 3334, 0), ObjectID.LUMBRIDGE_SC_FENCEJUMP),
-	GOBLIN_VILLAGE_WALL(14, "Wall", new WorldPoint(2925, 3523, 0), ObjectID.BURTHORPE_DIARY_SHORTCUT),
-	CORSAIR_COVE_DUNGEON_PILLAR(15, "Pillar Jump", new WorldPoint(1980, 8996, 0), ObjectID.DS2_OGRE_CORSAIR_DUNGEON_SHORTCUT),
+	GOBLIN_VILLAGE_WALL(14, "Wall", new WorldPoint(2925, 3523, 0), ObjectID.BURTHORPE_DIARY_SHORTCUT)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return client.getVarbitValue(VarbitID.FALADOR_DIARY_EASY_COMPLETE) == 1;
+		}
+	},
+	CORSAIR_COVE_DUNGEON_PILLAR(15, "Pillar Jump", new WorldPoint(1980, 8996, 0), ObjectID.DS2_OGRE_CORSAIR_DUNGEON_SHORTCUT)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return client.getVarbitValue(VarbitID.CORSAIR_COVE_RESOURCE_ENTRY) == 1;
+		}
+	},
 	EDGEVILLE_DUNGEON_MONKEYBARS(15, "Monkey Bars", null, ObjectID.MONKEYBARS_END1),
 	TROLLHEIM_ROCKS(15, "Rocks", null, new WorldPoint(2838, 3614, 0), ObjectID.TROLL_CLIMBINGROCKS), // No fixed world map location, but rocks near death plateau have a requirement of 15
 	YANILLE_UNDERWALL_TUNNEL(16, "Underwall Tunnel", new WorldPoint(2574, 3109, 0), ObjectID.YANILLE_CASTLEHOLE_SC, ObjectID.YANILLE_CASTLEWALL_SC),
@@ -121,7 +158,14 @@ public enum AgilityShortcut
 	COAL_TRUCKS_LOG_BALANCE(20, "Log Balance", new WorldPoint(2598, 3475, 0), ObjectID.MINE_LOG_BALANCE1),
 	GRAND_EXCHANGE_UNDERWALL_TUNNEL(21, "Underwall Tunnel", new WorldPoint(3139, 3515, 0), ObjectID.VARROCK_SC_TUNNEL_WEST, ObjectID.VARROCK_SC_TUNNEL_EAST),
 	BRIMHAVEN_DUNGEON_PIPE(22, "Pipe Squeeze", new WorldPoint(2654, 9569, 0), ObjectID.KARAM_DUNGEON_PIPE2),
-	OBSERVATORY_SCALE_CLIFF(23, "Grapple Rocks", new WorldPoint(2447, 3155, 0), ObjectID.XBOWS_ROPE_DIAGONAL_OBS, ObjectID.XBOWS_ROCK_HILLTOP_OBS),
+	OBSERVATORY_SCALE_CLIFF(23, "Grapple Rocks", new WorldPoint(2447, 3155, 0), ObjectID.XBOWS_ROPE_DIAGONAL_OBS, ObjectID.XBOWS_ROCK_HILLTOP_OBS)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.OBSERVATORY_QUEST.getState(client) == QuestState.FINISHED && client.getBoostedSkillLevel(Skill.STRENGTH) >= 28 && client.getBoostedSkillLevel(Skill.RANGED) >= 24;
+		}
+	},
 	NEMUS_RETREAT_WALL_SOUTH_EAST(24, "Broken Wall", new WorldPoint(1386, 3302, 0), ObjectID.AV_LOWWALL_CLIMB_1),
 	NEMUS_RETREAT_WALL_SOUTH_WEST(24, "Broken Wall", new WorldPoint(1368, 3295, 0), ObjectID.AV_LOWWALL_CLIMB_1),
 	NEMUS_RETREAT_WALL_EAST(24, "Broken Wall", new WorldPoint(1389, 3309, 0), ObjectID.AV_LOWWALL_CLIMB_2),
@@ -130,12 +174,26 @@ public enum AgilityShortcut
 	KOUREND_CATACOMBS_STONES_NORTH(28, "Stones", new WorldPoint(1613, 10071, 0), ObjectID.ZEAH_CATA_STEPSTONE),
 	KOUREND_CATACOMBS_STONES_SOUTH(28, "Stones", new WorldPoint(1609, 10060, 0), ObjectID.ZEAH_CATA_STEPSTONE),
 	MOUNT_KARUULM_LOWER(29, "Rocks", new WorldPoint(1324, 3782, 0), ObjectID.MOUNT_KARUULM_SHORTCUT_ROCKS_LOW),
-	CORSAIR_COVE_RESOURCE_ROCKS(30, "Rocks", new WorldPoint(2486, 2898, 0), ObjectID.DS2_CORSAIR_SHORTCUT_BOTTOM, ObjectID.DS2_CORSAIR_SHORTCUT_TOP),
+	CORSAIR_COVE_RESOURCE_ROCKS(30, "Rocks", new WorldPoint(2486, 2898, 0), ObjectID.DS2_CORSAIR_SHORTCUT_BOTTOM, ObjectID.DS2_CORSAIR_SHORTCUT_TOP)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return client.getVarbitValue(VarbitID.CORSAIR_COVE_RESOURCE_ENTRY) == 1;
+		}
+	},
 	SOUTHEAST_KARAJMA_STEPPING_STONES(30, "Stepping Stones", new WorldPoint(2924, 2946, 0), ObjectID.ZQROCKJUMP1, ObjectID.ZQROCKJUMP2, ObjectID.ZQROCKJUMP3),
 	BRIMHAVEN_DUNGEON_LOG_BALANCE(30, "Log Balance", null, ObjectID.KARAM_DUNGEON_BAMBOO_LOGBALANCE1),
 	AGILITY_PYRAMID_ROCKS_EAST(30, "Rocks", null, ObjectID.NTK_AGILITY_CLIMBING_ROCKS_2),
 	DRAYNOR_MANOR_STEPPING_STONES(31, "Stepping Stones", new WorldPoint(3150, 3362, 0), ObjectID.LUMBRIDGE_SC_STEPSTONE),
-	CATHERBY_CLIFFSIDE_GRAPPLE(32, "Grapple Rock", new WorldPoint(2868, 3429, 0), ObjectID.XBOWS_ROCK_HILLTOP_BASIC),
+	CATHERBY_CLIFFSIDE_GRAPPLE(32, "Grapple Rock", new WorldPoint(2868, 3429, 0), ObjectID.XBOWS_ROCK_HILLTOP_BASIC)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return client.getBoostedSkillLevel(Skill.STRENGTH) >= 35 && client.getBoostedSkillLevel(Skill.RANGED) >= 35;
+		}
+	},
 	CAIRN_ISLE_ROCKS(32, "Rocks", null, ObjectID.ZQCLIMBINGROCKS),
 	SHILO_VILLAGE_STEPPING_STONES( 32, "Stepping Stones", new WorldPoint(2863, 2974, 0), ObjectID.SHILO_RIVER_STEPPINGSTONE),
 	ARDOUGNE_LOG_BALANCE(33, "Log Balance", new WorldPoint(2602, 3336, 0), ObjectID.ARDOUGNE_LOG_BALANCE_LEFT_SC, ObjectID.ARDOUGNE_LOG_BALANCE_MID_SC, ObjectID.ARDOUGNE_LOG_BALANCE_RIGHT_SC),
@@ -151,11 +209,32 @@ public enum AgilityShortcut
 			return Quest.GARDEN_OF_TRANQUILLITY.getState(client) == QuestState.FINISHED;
 		}
 	},
-	CATHERBY_OBELISK_GRAPPLE(36, "Grapple Rock", null, ObjectID.XBOWS_BEACH_TO_ISLAND_TREE_BASIC),
+	CATHERBY_OBELISK_GRAPPLE(36, "Grapple Rock", null, ObjectID.XBOWS_BEACH_TO_ISLAND_TREE_BASIC)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return client.getBoostedSkillLevel(Skill.STRENGTH) >= 22 && client.getBoostedSkillLevel(Skill.RANGED) >= 39;
+		}
+	},
 	NEMUS_RETREAT_STEPPING_STONES(36, "Stepping Stones", new WorldPoint(1395, 3309, 0), ObjectID.AV_STEPSTONE_1),
-	GNOME_STRONGHOLD_ROCKS(37, "Rocks", new WorldPoint(2485, 3515, 0), ObjectID.GNOME_STRONGHOLD_SC_ROCK_TOP, ObjectID.GNOME_STRONGHOLD_SC_ROCK_BOTTOM),
+	GNOME_STRONGHOLD_ROCKS(37, "Rocks", new WorldPoint(2485, 3515, 0), ObjectID.GNOME_STRONGHOLD_SC_ROCK_TOP, ObjectID.GNOME_STRONGHOLD_SC_ROCK_BOTTOM)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.THE_GRAND_TREE.getState(client) == QuestState.FINISHED && Quest.TREE_GNOME_VILLAGE.getState(client) == QuestState.FINISHED;
+		}
+	},
 	AL_KHARID_MINING_PITCLIFF_SCRAMBLE(38, "Rocks", new WorldPoint(3305, 3315, 0), ObjectID.ALKHARID_MINE_SC_TOP, ObjectID.ALKHARID_MINE_SC_BOTTOM),
-	YANILLE_WALL_GRAPPLE(39, "Grapple Wall", new WorldPoint(2552, 3072, 0), ObjectID.XBOWS_YANILLE_CASTLEWALL),
+	YANILLE_WALL_GRAPPLE(39, "Grapple Wall", new WorldPoint(2552, 3072, 0), ObjectID.XBOWS_YANILLE_CASTLEWALL)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return client.getBoostedSkillLevel(Skill.STRENGTH) >= 38 && client.getBoostedSkillLevel(Skill.RANGED) >= 21;
+		}
+	},
 	NEITIZNOT_BRIDGE_REPAIR(0, "Bridge Repair - Quest", new WorldPoint(2315, 3828, 0), ObjectID.FRISB_BRIDGE_1_S, ObjectID.FRISB_BRIDGE_1_N),
 	NEITIZNOT_BRIDGE_SOUTHEAST(0, "Rope Bridge", null, ObjectID.FRISB_BRIDGE_2_S, ObjectID.FRISB_BRIDGE_2_N),
 	NEITIZNOT_BRIDGE_NORTHWEST(0, "Rope Bridge", null, ObjectID.FRISB_BRIDGE_3_S, ObjectID.FRISB_BRIDGE_3_N),
@@ -180,8 +259,22 @@ public enum AgilityShortcut
 	KOUREND_RIVER_STEPPING_STONES(45, "Stepping Stones", new WorldPoint(1720, 3551, 0), ObjectID.ZEAH_SALTPETRE_SHORTCUT),
 	TIRANNWN_LOG_BALANCE(45, "Log Balance", null, ObjectID.REGICIDE_LOGBALANCE3_START, ObjectID.REGICIDE_LOGBALANCE1_START, ObjectID.REGICIDE_LOGBALANCE2, ObjectID.REGICIDE_LOGBALANCE1, ObjectID.REGICIDE_LOGBALANCE2_START),
 	COSMIC_ALTAR_MEDIUM_WALKWAY(46, "Narrow Walkway", new WorldPoint(2399, 4403, 0), ObjectID.FAIRY_SC_JUTTINGWALL),
-	DEEP_WILDERNESS_DUNGEON_CREVICE_NORTH(46, "Narrow Crevice", new WorldPoint(3047, 10335, 0), ObjectID.WILDERNESS_DEEP_CREVICE),
-	DEEP_WILDERNESS_DUNGEON_CREVICE_SOUTH(46, "Narrow Crevice", new WorldPoint(3045, 10327, 0), ObjectID.WILDERNESS_DEEP_CREVICE),
+	DEEP_WILDERNESS_DUNGEON_CREVICE_NORTH(46, "Narrow Crevice", new WorldPoint(3047, 10335, 0), ObjectID.WILDERNESS_DEEP_CREVICE)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return client.getVarbitValue(VarbitID.WILDERNESS_DIARY_MEDIUM_COMPLETE) == 1;
+		}
+	},
+	DEEP_WILDERNESS_DUNGEON_CREVICE_SOUTH(46, "Narrow Crevice", new WorldPoint(3045, 10327, 0), ObjectID.WILDERNESS_DEEP_CREVICE)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return client.getVarbitValue(VarbitID.WILDERNESS_DIARY_MEDIUM_COMPLETE) == 1;
+		}
+	},
 	TONALI_CAVERN_STEPPING_STONE(46, "Stepping Stones", null, ObjectID.VMQ4_CRYPT_STEPSTONE),
 	TONALI_CAVERN_LOG_BALANCE(46, "Log Balance", null, ObjectID.VMQ4_CRYPT_LOG_BALANCE_1),
 	TROLLHEIM_HARD_CLIFF_SCRAMBLE(47, "Rocks", new WorldPoint(2902, 3680, 0), ObjectID.ASC_TROLL_MOUNTAIN_CLIMBROCK_4),
@@ -193,8 +286,22 @@ public enum AgilityShortcut
 	SHAMAN_CAVES_JAGGED_WALL(50, "Jagged wall", null, ObjectID.CRUMBLED_WALL),
 	VARROCK_SEWERS_PIPE_SQUEEZE(51, "Pipe Squeeze", new WorldPoint(3152, 9905, 0), ObjectID.VARROCK_DUNGEON_PIPE_SC),
 	ARCEUUS_ESSENCE_MINE_EAST_SCRAMBLE(52, "Rock Climb", new WorldPoint(1770, 3851, 0), ObjectID.ARCHEUUS_RUNESTONE_SHORTCUT_MIDGREY_TOP, ObjectID.ARCHEUUS_RUNESTONE_SHORTCUT_MIDGREY_BOTTOM),
-	KARAMJA_VOLCANO_GRAPPLE_NORTH(53, "Grapple Rock", new WorldPoint(2873, 3143, 0), ObjectID.XBOWS_JUNGLETREE_KARAMJA_BASIC),
-	KARAMJA_VOLCANO_GRAPPLE_SOUTH(53, "Grapple Rock", new WorldPoint(2874, 3128, 0), ObjectID.XBOWS_JUNGLETREE_KARAMJA_BASIC),
+	KARAMJA_VOLCANO_GRAPPLE_NORTH(53, "Grapple Rock", new WorldPoint(2873, 3143, 0), ObjectID.XBOWS_JUNGLETREE_KARAMJA_BASIC)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return client.getBoostedSkillLevel(Skill.STRENGTH) >= 21 && client.getBoostedSkillLevel(Skill.RANGED) >= 42;
+		}
+	},
+	KARAMJA_VOLCANO_GRAPPLE_SOUTH(53, "Grapple Rock", new WorldPoint(2874, 3128, 0), ObjectID.XBOWS_JUNGLETREE_KARAMJA_BASIC)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return client.getBoostedSkillLevel(Skill.STRENGTH) >= 21 && client.getBoostedSkillLevel(Skill.RANGED) >= 42; // Also requires prior use from the North
+		}
+	},
 	ALDARIN_ROCKS(54, "Rocks", new WorldPoint(1340, 2916, 0), ObjectID.ALDARIN_CLIFF_SHORTCUT_TOP, ObjectID.ALDARIN_CLIFF_SHORTCUT_BOTTOM),
 	MOTHERLODE_MINE_WALL_EAST(54, "Wall", new WorldPoint(3124, 9703, 0), ObjectID.MOTHERLODE_SHORTCUT),
 	MOTHERLODE_MINE_WALL_WEST(54, "Wall", new WorldPoint(3118, 9702, 0), ObjectID.MOTHERLODE_SHORTCUT),
@@ -210,8 +317,22 @@ public enum AgilityShortcut
 	ELVEN_OVERPASS_CLIFF_SCRAMBLE_PRIFDDINAS(59, "Rocks", new WorldPoint(3369, 6052, 0), ObjectID.ELVES_OVERPASS_SC_ROCKS_TOP, ObjectID.ELVES_OVERPASS_SC_ROCKS_BOTTOM),
 	ASGARNIA_ICE_DUNGEON_TUNNEL_EAST(60, "Tunnel", new WorldPoint(2989, 9547, 0), ObjectID.CAVEWALL_SHORTCUT_ROYAL_TITANS_EAST),
 	ASGARNIA_ICE_DUNGEON_TUNNEL_WEST(60, "Tunnel", new WorldPoint(2968, 9549, 0), ObjectID.CAVEWALL_SHORTCUT_ROYAL_TITANS_WEST),
-	WILDERNESS_GWD_CLIMB_EAST(60, "Rocks", new WorldPoint(2943, 3770, 0), ObjectID.GODWARS_CLIMBING_ROCKS_UP, ObjectID.GODWARS_CLIMBING_ROCKS_DOWN, ObjectID.GODWARS_CLIMBING_ROCKS_INACTIVE, ObjectID.GODWARS_CLIMBING_ROCKS_PLAIN_UP, ObjectID.GODWARS_CLIMBING_ROCKS_PLAIN_DOWN, ObjectID.GODWARS_CLIMBING_ROCKS_INACTIVE_PLAIN),
-	WILDERNESS_GWD_CLIMB_WEST(60, "Rocks", new WorldPoint(2928, 3760, 0), ObjectID.GODWARS_CLIMBING_ROCKS_UP, ObjectID.GODWARS_CLIMBING_ROCKS_DOWN, ObjectID.GODWARS_CLIMBING_ROCKS_INACTIVE, ObjectID.GODWARS_CLIMBING_ROCKS_PLAIN_UP, ObjectID.GODWARS_CLIMBING_ROCKS_PLAIN_DOWN, ObjectID.GODWARS_CLIMBING_ROCKS_INACTIVE_PLAIN),
+	WILDERNESS_GWD_CLIMB_EAST(60, "Rocks", new WorldPoint(2943, 3770, 0), ObjectID.GODWARS_CLIMBING_ROCKS_UP, ObjectID.GODWARS_CLIMBING_ROCKS_DOWN, ObjectID.GODWARS_CLIMBING_ROCKS_INACTIVE, ObjectID.GODWARS_CLIMBING_ROCKS_PLAIN_UP, ObjectID.GODWARS_CLIMBING_ROCKS_PLAIN_DOWN, ObjectID.GODWARS_CLIMBING_ROCKS_INACTIVE_PLAIN)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.TROLL_STRONGHOLD.getState(client) == QuestState.FINISHED;
+		}
+	},
+	WILDERNESS_GWD_CLIMB_WEST(60, "Rocks", new WorldPoint(2928, 3760, 0), ObjectID.GODWARS_CLIMBING_ROCKS_UP, ObjectID.GODWARS_CLIMBING_ROCKS_DOWN, ObjectID.GODWARS_CLIMBING_ROCKS_INACTIVE, ObjectID.GODWARS_CLIMBING_ROCKS_PLAIN_UP, ObjectID.GODWARS_CLIMBING_ROCKS_PLAIN_DOWN, ObjectID.GODWARS_CLIMBING_ROCKS_INACTIVE_PLAIN)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.TROLL_STRONGHOLD.getState(client) == QuestState.FINISHED;
+		}
+	},
 	MOS_LEHARMLESS_STEPPING_STONE(60, "Stepping Stone", new WorldPoint(3710, 2970, 0), ObjectID.MOS_LES_STEPPING_STONE),
 	WINTERTODT_GAP(60, "Gap", new WorldPoint(1629, 4023, 0), ObjectID.WINT_PILLAR_JUMP),
 	UNGAEL_ICE(60, "Ice Chunks", new WorldPoint(2262, 4044, 0), ObjectID.UNGAEL_CRATER_EXIT, ObjectID.UNGAEL_CRATER_SHORTCUT, ObjectID.UNGAEL_CRATER_SHORTCUT_TOP, ObjectID.UNGAEL_CRATER_SHORTCUT_BOTTOM, ObjectID.UNGAEL_CRATER_ENTRANCE_INSTANCE, ObjectID.UNGAEL_CRATER_EXIT_INSTANCE, ObjectID.UNGAEL_CRATER_ENTRANCE, ObjectID.UNGAEL_CRATER_ENTRANCE_INSTANCE_LEAVE, ObjectID.UNGAEL_CRATER_EXIT_INSTANCE_LEAVE),
@@ -228,17 +349,45 @@ public enum AgilityShortcut
 	TROLLHEIM_WILDERNESS_ROCKS_EAST(64, "Rocks", new WorldPoint(2945, 3678, 0), ObjectID.TROLLHEIM_WILDY_CLIMB_ROCKS),
 	TROLLHEIM_WILDERNESS_ROCKS_WEST(64, "Rocks", new WorldPoint(2917, 3672, 0), ObjectID.TROLLHEIM_WILDY_CLIMB_ROCKS),
 	FOSSIL_ISLAND_VOLCANO(64, "Rope", new WorldPoint(3780, 3822, 0), ObjectID.FOSSIL_VOLCANO_AGILITY_ROPE_BOTTOM, ObjectID.FOSSIL_VOLCANO_AGILITY_ROPE_TOP),
-	MORYTANIA_TEMPLE(65, "Loose Railing", new WorldPoint(3422, 3476, 0), ObjectID.MORYTANIA_CLIMBINGROCKS_SC_TOP, ObjectID.MORYTANIA_CLIMBINGROCKS_SC_BOTTOM, ObjectID.MORYTANIA_RAILING_SC_FENCE_1, ObjectID.MORYTANIA_RAILING_SC_FENCE_2),
+	MORYTANIA_TEMPLE(65, "Loose Railing", new WorldPoint(3422, 3476, 0), ObjectID.MORYTANIA_CLIMBINGROCKS_SC_TOP, ObjectID.MORYTANIA_CLIMBINGROCKS_SC_BOTTOM, ObjectID.MORYTANIA_RAILING_SC_FENCE_1, ObjectID.MORYTANIA_RAILING_SC_FENCE_2)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.PRIEST_IN_PERIL.getState(client) == QuestState.FINISHED;
+		}
+	},
 	REVENANT_CAVES_GREEN_DRAGONS(65, "Jump", new WorldPoint(3220, 10086, 0), ObjectID.WILD_CAVE_AGILITY_JUMP),
 	COSMIC_ALTAR_ADVANCED_WALKWAY(66, "Narrow Walkway", new WorldPoint(2408, 4401, 0), ObjectID.FAIRY_SC_JUTTINGWALL),
 	LUMBRIDGE_DESERT_STEPPING_STONE(66, "Stepping Stone", new WorldPoint(3210, 3135, 0), ObjectID.LUMBRIDGE_DIARY_DESERT_SHORTCUT),
 	TAVERLEY_WALL_CLIMBING_ROCKS(66, "Climbing rocks", new WorldPoint(2945, 3439, 0), ObjectID.TAVELRYSHORTCUT),
-	HEROES_GUILD_TUNNEL_EAST(67, "Crevice", new WorldPoint(2898, 9901, 0), ObjectID.HEROES_GUILD_SHORTCUT_TO_FOUNTAIN, ObjectID.HEROES_GUILD_SHORTCUT_FROM_FOUNTAIN),
-	HEROES_GUILD_TUNNEL_WEST(67, "Crevice", new WorldPoint(2913, 9895, 0), ObjectID.HEROES_GUILD_SHORTCUT_TO_FOUNTAIN, ObjectID.HEROES_GUILD_SHORTCUT_FROM_FOUNTAIN),
+	HEROES_GUILD_TUNNEL_EAST(67, "Crevice", new WorldPoint(2898, 9901, 0), ObjectID.HEROES_GUILD_SHORTCUT_TO_FOUNTAIN, ObjectID.HEROES_GUILD_SHORTCUT_FROM_FOUNTAIN)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.HEROES_QUEST.getState(client) == QuestState.FINISHED && client.getVarbitValue(VarbitID.FALADOR_DIARY_HARD_COMPLETE) == 1;
+		}
+	},
+	HEROES_GUILD_TUNNEL_WEST(67, "Crevice", new WorldPoint(2913, 9895, 0), ObjectID.HEROES_GUILD_SHORTCUT_TO_FOUNTAIN, ObjectID.HEROES_GUILD_SHORTCUT_FROM_FOUNTAIN)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.HEROES_QUEST.getState(client) == QuestState.FINISHED && client.getVarbitValue(VarbitID.FALADOR_DIARY_HARD_COMPLETE) == 1;
+		}
+	},
 	YANILLE_DUNGEON_RUBBLE_CLIMB(67, "Pile of Rubble", null, ObjectID.CLIMBINGCAVEROCKS1, ObjectID.CLIMBINGCAVEROCKS2),
 	ELVEN_OVERPASS_MEDIUM_CLIFF(68, "Rocks", new WorldPoint(2337, 3288, 0), ObjectID.ELVES_OVERPASS_SC_ROCKS_TOP, ObjectID.ELVES_OVERPASS_SC_ROCKS_BOTTOM),
 	ICE_MOUNTAIN_WESTERN_SCRAMBLE(68, "Rocks", new WorldPoint(2998, 3484, 0), ObjectID.ICE_MOUNTAIN_SHORTCUT_TOP, ObjectID.ICE_MOUNTAIN_SHORTCUT_BOTTOM),
-	ELVEN_OVERPASS_MEDIUM_CLIFF_PRIFDDINAS(68, "Rocks", new WorldPoint(3361, 6040, 0), ObjectID.ELVES_OVERPASS_SC_ROCKS_TOP, ObjectID.ELVES_OVERPASS_SC_ROCKS_BOTTOM),
+	ELVEN_OVERPASS_MEDIUM_CLIFF_PRIFDDINAS(68, "Rocks", new WorldPoint(3361, 6040, 0), ObjectID.ELVES_OVERPASS_SC_ROCKS_TOP, ObjectID.ELVES_OVERPASS_SC_ROCKS_BOTTOM)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.REGICIDE.getState(client) == QuestState.FINISHED;
+		}
+	},
 	WEISS_OBSTACLES(68, "Shortcut", null, ObjectID.MY2ARM_CLIFF_SHORTCUT_1, ObjectID.MY2ARM_CLIFF_SHORTCUT_2, ObjectID.MY2ARM_CLIFF_SHORTCUT_3, ObjectID.MY2ARM_CLIFF_SHORTCUT_3_ROPETRAIL_MULTI, ObjectID.MY2ARM_CLIFF_SHORTCUT_4, ObjectID.MY2ARM_CLIFF_SHORTCUT_5, ObjectID.MY2ARM_CLIFF_SHORTCUT_6),
 	WEISS_FARMING_PATCH_BOULDER(0, "Shortcut", null, ObjectID.MY2ARM_HERBPATCH_ACCESS),
 	ARCEUUS_ESSENSE_NORTH(69, "Rock Climb", new WorldPoint(1759, 3873, 0), ObjectID.ARCHEUUS_RUNESTONE_SHORTCUT_GREY_SHORTCUT_NORTH),
@@ -253,7 +402,7 @@ public enum AgilityShortcut
 		public boolean matches(Client client, TileObject object)
 		{
 			// there are two BIG_WINDOW objects right next to each other here, but only this one is valid
-			return object.getId() != ObjectID.KHARID_BIGWINDOW || object.getWorldLocation().equals(new WorldPoint(3295, 3158, 0));
+			return (object.getId() != ObjectID.KHARID_BIGWINDOW || object.getWorldLocation().equals(new WorldPoint(3295, 3158, 0))) && Quest.PRINCE_ALI_RESCUE.getState(client) == QuestState.FINISHED;
 		}
 	},
 	GWD_SARADOMIN_ROPE_NORTH(70, "Rope Descent", new WorldPoint(2912, 5300, 0), ObjectID.GODWARS_ROCK_ROPE_MULTI1_BOTTOM, ObjectID.GODWARS_ROCK_ROPE_MULTI1),
@@ -268,7 +417,14 @@ public enum AgilityShortcut
 	ASGARNIA_ICE_DUNGEON_BASIC_SOUTH(72, "Tunnel", new WorldPoint(3033, 9559, 0), ObjectID.CAVEWALL_SHORTCUT_WYVERN_SOUTH),
 	CHAOS_TEMPLE_STEPPING_STONE(72, "Stepping stone", new WorldPoint(3267, 3628, 0), ObjectID.WILDERNESS_CHAOS_TEMPLE_SHORTCUT),
 	BARROWS_WALL_JUMP(72, "Dry stone wall", new WorldPoint(3544, 3282, 0), ObjectID.BARROWS_DRYSTONEWALL_SHORTCUT),
-	TROLL_STRONGHOLD_WALL_CLIMB(73, "Rocks", new WorldPoint(2841, 3694, 0), ObjectID.DIARY_TROLL_CLIMBINGROCKS),
+	TROLL_STRONGHOLD_WALL_CLIMB(73, "Rocks", new WorldPoint(2841, 3694, 0), ObjectID.DIARY_TROLL_CLIMBINGROCKS)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.MY_ARMS_BIG_ADVENTURE.getState(client) == QuestState.FINISHED;
+		}
+	},
 	COF_PLATFORM_TOP(73, "Platform Edge", new WorldPoint(1309, 10099, 0), new WorldPoint(1438, 10098, 2), ObjectID.COF_AGILITY_LIP),
 	COF_PLATFORM_MID(73, "Jump", new WorldPoint(1314, 10002, 0), new WorldPoint(1443, 10097, 1), ObjectID.COF_AGILITY_JUMP),
 	ARCEUUS_ESSENSE_MINE_WEST(73, "Rock Climb", new WorldPoint(1742, 3853, 0), ObjectID.ARCHEUUS_RUNESTONE_SHORTCUT_GREY_TOP, ObjectID.ARCHEUUS_RUNESTONE_SHORTCUT_GREY_BOTTOM),
@@ -280,15 +436,36 @@ public enum AgilityShortcut
 	REVENANT_CAVES_ANKOU_EAST(75, "Jump", new WorldPoint(3201, 10195, 0), ObjectID.WILD_CAVE_AGILITY_JUMP),
 	REVENANT_CAVES_ANKOU_NORTH(75, "Jump", new WorldPoint(3180, 10209, 0), ObjectID.WILD_CAVE_AGILITY_JUMP),
 	DARKFROST_CLIFF_SCRAMBLE(76, "Rocks", new WorldPoint(1477, 3307, 0), ObjectID.DARKFROST_SHORTCUT_BOTTOM, ObjectID.DARKFROST_SHORTCUT_TOP),
-	ZUL_ANDRA_ISLAND_CROSSING(76, "Stepping Stone", new WorldPoint(2156, 3073, 0), ObjectID.SNAKEBOSS_STEPPINGSTONE),
+	ZUL_ANDRA_ISLAND_CROSSING(76, "Stepping Stone", new WorldPoint(2156, 3073, 0), ObjectID.SNAKEBOSS_STEPPINGSTONE)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.REGICIDE.getState(client) == QuestState.FINISHED;
+		}
+	},
 	WILDERNESS_SLAYER_CAVE_CREVICE_NORTH_EAST(77, "Crevice", new WorldPoint(3433, 10093, 0), ObjectID.WILDERNESS_SLAYER_CAVE_CREVICE),
 	WILDERNESS_SLAYER_CAVE_CREVICE_SOUTH_EAST(77, "Crevice", new WorldPoint(3434, 10115, 0), ObjectID.WILDERNESS_SLAYER_CAVE_CREVICE),
 	WILDERNESS_SLAYER_CAVE_CREVICE_NORTH_WEST(77, "Crevice", new WorldPoint(3341, 10149, 0), ObjectID.WILDERNESS_SLAYER_CAVE_CREVICE),
 	WILDERNESS_SLAYER_CAVE_CREVICE_SOUTH_WEST(77, "Crevice", new WorldPoint(3333, 10119, 0), ObjectID.WILDERNESS_SLAYER_CAVE_CREVICE),
 	IORWERTHS_DUNGEON_NORTHERN_SHORTCUT_EAST(78, "Tight Gap", new WorldPoint(3221, 12441, 0), ObjectID.PRIF_SLAYER_DUNGEON_SHORTCUT_1A),
 	IORWERTHS_DUNGEON_NORTHERN_SHORTCUT_WEST(78, "Tight Gap", new WorldPoint(3215, 12441, 0), ObjectID.PRIF_SLAYER_DUNGEON_SHORTCUT_1B),
-	SHILO_VILLAGE_ROCKS(79, "Rocks", new WorldPoint(2870, 3003, 0), ObjectID.SHORTCUT_SHILO_ROCKS_TOP, ObjectID.SHORTCUT_SHILO_ROCKS_BOTTOM),
-	KHARAZI_JUNGLE_VINE_CLIMB(79, "Vine", new WorldPoint(2897, 2939, 0), ObjectID.KHARAZI_SHORTCUT_VINE_END, ObjectID.KHARAZI_SHORTCUT_VINE_DIAG1),
+	SHILO_VILLAGE_ROCKS(79, "Rocks", new WorldPoint(2870, 3003, 0), ObjectID.SHORTCUT_SHILO_ROCKS_TOP, ObjectID.SHORTCUT_SHILO_ROCKS_BOTTOM)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.SHILO_VILLAGE.getState(client) == QuestState.FINISHED;
+		}
+	},
+	KHARAZI_JUNGLE_VINE_CLIMB(79, "Vine", new WorldPoint(2897, 2939, 0), ObjectID.KHARAZI_SHORTCUT_VINE_END, ObjectID.KHARAZI_SHORTCUT_VINE_DIAG1)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.LEGENDS_QUEST.getState(client) == QuestState.FINISHED;
+		}
+	},
 	TAVERLEY_DUNGEON_SPIKED_BLADES(80, "Strange Floor", new WorldPoint(2877, 9813, 0), ObjectID.TAVERLY_DUNGEON_FLOOR_SPIKES_SC),
 	WATERBIRTH_DUNGEON_CREVICE(81, "Crevice", new WorldPoint(2604, 10070, 0), ObjectID.DAGANNOTH_CREVICE),
 	LAVA_MAZE_NORTH_JUMP(82, "Stepping Stone", new WorldPoint(3092, 3880, 0), ObjectID.WILDERNESS_LAVA_MAZE_NORTHERN_SHORTCUT),
@@ -298,20 +475,55 @@ public enum AgilityShortcut
 	IORWERTHS_DUNGEON_SOUTHERN_SHORTCUT_EAST(84, "Tight Gap", new WorldPoint(3241, 12420, 0), ObjectID.PRIF_SLAYER_DUNGEON_SHORTCUT_2A),
 	IORWERTHS_DUNGEON_SOUTHERN_SHORTCUT_WEST(84, "Tight Gap", new WorldPoint(3231, 12420, 0), ObjectID.PRIF_SLAYER_DUNGEON_SHORTCUT_2B),
 	CRANDOR_ROCK_CLIMB(84, "Rocks", new WorldPoint(2831, 3252, 0), ObjectID.CRANDOR_SHORTCUT_TOP, ObjectID.CRANDOR_SHORTCUT_BOTTOM),
-	ELVEN_ADVANCED_CLIFF_SCRAMBLE(85, "Rocks", new WorldPoint(2337, 3253, 0), ObjectID.ELVES_OVERPASS_SC_ROCKS_TOP, ObjectID.ELVES_OVERPASS_SC_ROCKS_BOTTOM),
-	ELVEN_ADVANCED_CLIFF_SCRAMBLE_PRIFDDINAS(85, "Rocks", new WorldPoint(3361, 6005, 0), ObjectID.ELVES_OVERPASS_SC_ROCKS_TOP, ObjectID.ELVES_OVERPASS_SC_ROCKS_BOTTOM),
+	ELVEN_ADVANCED_CLIFF_SCRAMBLE(85, "Rocks", new WorldPoint(2337, 3253, 0), ObjectID.ELVES_OVERPASS_SC_ROCKS_TOP, ObjectID.ELVES_OVERPASS_SC_ROCKS_BOTTOM)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.REGICIDE.getState(client) == QuestState.FINISHED;
+		}
+	},
+	ELVEN_ADVANCED_CLIFF_SCRAMBLE_PRIFDDINAS(85, "Rocks", new WorldPoint(3361, 6005, 0), ObjectID.ELVES_OVERPASS_SC_ROCKS_TOP, ObjectID.ELVES_OVERPASS_SC_ROCKS_BOTTOM)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.REGICIDE.getState(client) == QuestState.FINISHED;
+		}
+	},
 	WATERBIRTH_ISLAND_ROCKS(85, "Rocks", new WorldPoint(2546, 3750, 0), ObjectID.DAGANNOTH_WATERBIRTH_ROCK_CLIMB_AGILITY_SHORTCUT_BOTTOM, ObjectID.DAGANNOTH_WATERBIRTH_ROCK_CLIMB_AGILITY_SHORTCUT_TOP),
-	KALPHITE_WALL(86, "Crevice", new WorldPoint(3214, 9508, 0), ObjectID.KALPHITE_WALL_SHORTCUT),
+	KALPHITE_WALL(86, "Crevice", new WorldPoint(3214, 9508, 0), ObjectID.KALPHITE_WALL_SHORTCUT)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return client.getVarbitValue(VarbitID.DESERT_DIARY_ELITE_COMPLETE) == 1;
+		}
+	},
 	BRIMHAVEN_DUNGEON_VINE_EAST(87, "Vine", new WorldPoint(2672, 9582, 0), ObjectID.KARAM_CAVEWALL_VINE_CLIMBABLE_BOTTOM, ObjectID.KARAM_CAVEWALL_VINE_CLIMBABLE_TOP),
 	BRIMHAVEN_DUNGEON_VINE_WEST(87, "Vine", new WorldPoint(2606, 9584, 0), ObjectID.KARAM_CAVEWALL_VINE_CLIMBABLE_BOTTOM, ObjectID.KARAM_CAVEWALL_VINE_CLIMBABLE_TOP),
 	MOUNT_KARUULM_PIPE_SOUTH(88, "Pipe", new WorldPoint(1316, 10214, 0), ObjectID.KARUULM_DUNGEON_SHORTCUT_PIPE_ACTIVE),
 	MOUNT_KARUULM_PIPE_NORTH(88, "Pipe", new WorldPoint(1345, 10230, 0), ObjectID.KARUULM_DUNGEON_SHORTCUT_PIPE_ACTIVE),
 	REVENANT_CAVES_CHAMBER_JUMP(89, "Jump", new WorldPoint(3240, 10144, 0), ObjectID.WILD_CAVE_AGILITY_JUMP),
-	VIYELDI_ROCK_CLIMB(91, "Rocks", null, ObjectID.VIYELDI_SHORTCUT_ROCK_MULTI, ObjectID.VIYELDI_SHORTCUT_ROPE_BASE_MULTI),
+	VIYELDI_ROCK_CLIMB(91, "Rocks", null, ObjectID.VIYELDI_SHORTCUT_ROCK_MULTI, ObjectID.VIYELDI_SHORTCUT_ROPE_BASE_MULTI)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.LEGENDS_QUEST.getState(client) == QuestState.FINISHED && Quest.SINS_OF_THE_FATHER.getState(client) == QuestState.FINISHED;
+		}
+	},
 	MEIYERDITCH_LAB_ADVANCED_TUNNELS_WEST(93, "Cave", new WorldPoint(3499, 9738, 0), ObjectID.MYQ5_WALL_CAVE_SHORTCUT_5),
 	MEIYERDITCH_LAB_ADVANCED_TUNNELS_MIDDLE(93, "Cave", new WorldPoint(3597, 9704, 0), ObjectID.MYQ5_WALL_CAVE_SHORTCUT_6_PARENT),
 	MEIYERDITCH_LAB_ADVANCED_TUNNELS_EAST(93, "Cave", new WorldPoint(3604, 9708, 0), ObjectID.MYQ5_WALL_CAVE_SHORTCUT_7, ObjectID.MYQ5_WALL_CAVE_SHORTCUT_8),
-	VIYELDI_CAVES_CREVICE(96, "Crevice", null, ObjectID.LEGENDS_QUEST_CAVE_SHORTCUT);
+	VIYELDI_CAVES_CREVICE(96, "Crevice", null, ObjectID.LEGENDS_QUEST_CAVE_SHORTCUT)
+	{
+		@Override
+		public boolean matches(Client client, TileObject object)
+		{
+			return Quest.LEGENDS_QUEST.getState(client) == QuestState.FINISHED;
+		}
+	};
 
 	/**
 	 * The agility level required to pass the shortcut
